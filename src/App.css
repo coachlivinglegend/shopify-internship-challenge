@@ -1,38 +1,52 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.app__container{
+  background-color: #bdd7cb;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+.main{
+  display: flex;
+  height: 85%;
+  min-width: 85%;
+  /* border-radius: 10px; */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.movie__results{
+  flex: 1;
+  height: 100%;
+  background-color: #f1f7f5;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.nom__movies{
+  background-color: #f8fcfb;
+  height: 100%;
+  flex: 1;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.movie__search__container{
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  border: 1px solid aqua;
+  margin-top: 20px;
+}
+
+.movie__search {
+  width: 70%;
+  margin: 0 auto;
+  height: 25px;
+  border-radius: 5px;
+  border: none;
+  background-color: darkgreen;
+}
+
+.movie__list{
+  color: yellow;
 }
