@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import MovieResult from "./components/MovieResult/MovieResult";
-import FlipMove from "react-flip-move";
+import Movie from "./components/Movie/Movie";
+import Nominee from "./components/Nominee/Nominee";
 
 const App = () => {
     const [query, setQuery] = useState("");
     const [searchResults, setSearchResults] = useState([]);
     const [isNominatedMoviesFull, setIsNominatedMoviesFull] = useState(true);
-    const [error, setError] = useState(false);
 
     const nominationStore = JSON.parse(
         localStorage.getItem("shoppiesNomination")
@@ -24,20 +23,18 @@ const App = () => {
     }, [nominatedMovies]);
 
     useEffect(() => {
-        if (query.length === 0) {
+        if (query.length < 2) {
             setSearchResults([]);
+            return;
         }
-        if (query.length < 2) return;
-        setError(false);
-        fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=8e7cd903&s=${query}`)
+
+        fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=8e7cd903&s=${query}`)
             .then(res => res.json())
             .then(data => {
                 if (data.Response === "False") {
-                    setError(true);
                 } else if (data.Response === "True") {
                     setSearchResults(data.Search);
                 }
-                console.log(data);
             });
     }, [query]);
 
@@ -61,23 +58,48 @@ const App = () => {
         }
     }, [nominatedMovies]);
 
+    const showNav = () => {
+        document
+            .querySelector("#mobileNom")
+            .classList.remove("mobileNomination");
+    };
+
+    const hideNav = () => {
+        document.querySelector("#mobileNom").classList.add("mobileNomination");
+    };
     return (
         <>
-            {nominatedMovies.length === 5 ? (
-                <div className="banner">
-                    <p>
-                        Welldone, you have successfully nominated 5 movies,{" "}
-                        <br /> Let's hope they win.
-                    </p>
-                </div>
-            ) : null}
             <div className="app__container">
                 <div className="app__title">
-                    The Shoppies: Movie awards for entrepreneurs
+                    <i class="fa fa-trophy" aria-hidden="true"></i> The
+                    Shoppies: Movie awards for entrepreneurs
                 </div>
+                {nominatedMovies.length === 5 ? (
+                    <div className="banner">
+                        <p>
+                            Welldone, you have successfully nominated 5 movies.
+                        </p>
+                    </div>
+                ) : null}
+
                 <main className="main">
                     <section className="movie__results">
-                        <span>Movie Title</span>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <span>Movie Title</span>
+                            <span className="mobile__icon"
+                                onClick={showNav}
+                                style={{ cursor: "pointer" }}
+                            >
+                              <i class="fa fa-bars" aria-hidden="true"></i>
+                                {" "}
+                                {nominatedMovies.length} / 5{" "}
+                            </span>
+                        </div>
                         <div className="movie__search__container">
                             <i className="fa fa-search" aria-hidden="true"></i>
                             <input
@@ -95,81 +117,66 @@ const App = () => {
                                 </p>
                             ) : (
                                 searchResults.map(movie => (
-                                    <div className="movie__list__item">
-                                        <div className="movie__list__item__image__wrapper">
-                                            <img
-                                                src={movie.Poster}
-                                                alt={movie.Title}
-                                                className="movie__list__item__image"
-                                            />
-                                        </div>
-                                        <div className="movie__list__item__desc">
-                                            <p className="movie__list__item__name">
-                                                {movie.Title}, {movie.Year}.
-                                            </p>
-                                        </div>
-                                        <button
-                                            className="nominate__button"
-                                            disabled={
-                                                isNominatedMoviesFull ||
-                                                nominatedMovies.some(
-                                                    nominatedMovie =>
-                                                        nominatedMovie.imdbID ===
-                                                        movie.imdbID
-                                                )
-                                            }
-                                            onClick={() => nominate(movie)}
-                                        >
-                                            {nominatedMovies.some(
-                                                nominatedMovie =>
-                                                    nominatedMovie.imdbID ===
-                                                    movie.imdbID
-                                            )
-                                                ? "NOMINATED"
-                                                : "NOMINATE"}
-                                        </button>
-                                    </div>
+                                    <Movie
+                                        movie={movie}
+                                        isNominatedMoviesFull={
+                                            isNominatedMoviesFull
+                                        }
+                                        nominate={nominate}
+                                        nominatedMovies={nominatedMovies}
+                                    />
                                 ))
                             )}
                         </div>
                     </section>
-                    <section className="nom__movies">
-                        <p>Nominated Movies</p>
+                    <section
+                        id="mobileNom"
+                        className="mobileNomination__show mobileNomination"
+                    >
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                position: "relative",
+                                marginBottom:"10px"
+                            }}
+                        >
+                            <i
+                                onClick={hideNav}
+                                style={{
+                                    position: "absolute",
+                                    top: 5,
+                                    right: 5,
+                                    cursor: "pointer",
+                                }}
+                                class="fa fa-times"
+                                aria-hidden="true"
+                            ></i>
+                            <p>Nominated Movies</p>
+                            <p>  </p>
+                        </div>
                         <div className="nom__list">
-                            <FlipMove duration={300} easing="ease-out">
-                                {nominatedMovies.map(nomMovie => {
-                                    return (
-                                        <div
-                                            key={nomMovie.imdbID}
-                                            className="nom__movie__item"
-                                        >
-                                            <div className="nom__movie__item__image__wrapper">
-                                                <img
-                                                    className="nom__movie__item__image"
-                                                    alt={nomMovie.Title}
-                                                    src={nomMovie.Poster}
-                                                />
-                                            </div>
-                                            <div>
-                                                <div className="nom__movie__item__details">
-                                                    {nomMovie.Title},{" "}
-                                                    {nomMovie.Year}.
-                                                </div>
-                                            </div>
-                                            <span
-                                                className="remove__movie"
-                                                onClick={() =>
-                                                    deleteNomination(
-                                                        nomMovie.imdbID
-                                                    )
-                                                }
-                                            >
-                                                REMOVE
-                                            </span>
-                                        </div>
-                                    );
-                                })}
-                            </FlipMove>
+                            <Nominee
+                                nominees={nominatedMovies}
+                                deleteNomination={deleteNomination}
+                            />
+                        </div>
+                    </section>
+                    <section className="nom__movies">
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <p>Nominated Movies</p>
+                            <p>{nominatedMovies.length} / 5 </p>
+                        </div>
+                        <div className="nom__list">
+                            <Nominee
+                                nominees={nominatedMovies}
+                                deleteNomination={deleteNomination}
+                            />
                         </div>
                     </section>
                 </main>

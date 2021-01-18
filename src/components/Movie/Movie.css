@@ -1,0 +1,126 @@
+.movie__list__item{
+    /* display: flex; */
+    width: 30%;
+    min-height: 350px;
+    margin-bottom: 10px;
+    /* border: 1px solid aqua; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+}
+
+@media screen and (max-width: 860px) {
+    .movie__list__item{
+      width: 45%;
+    }  
+
+}
+@media screen and (max-width: 700px) {
+    .movie__list__item{
+      width: 90%;
+    }  
+
+    .nom__movies {
+        flex: 2.2;
+    }
+    
+}
+
+@media screen and (max-width: 600px) {
+    .movie__results{
+        border-radius: 10px;
+    }
+    .nom__movies{
+        display: none;
+    }
+
+    .movie__list__item{
+        max-width: 300px;
+    }
+
+    .mobile__icon{
+        display: block !important;
+    }
+    
+}
+
+.mobileNomination__show {
+    background-color: #f8fcfb;
+    height: 85vh;
+    width: calc(100% - 10px);
+    border-radius: 10px;
+    padding: 10px 20px;
+    position: absolute;
+    overflow-x: hidden;
+
+}
+
+.mobileNomination__show p{
+    margin: 0;
+
+}
+
+.mobile__icon{
+    display: none;
+}
+
+.mobileNomination{
+    display: none !important;
+}
+
+
+.movie__list__item__image__wrapper{
+    width: 100%;
+}
+
+.movie__list__item__image {
+    max-width: 100%;
+    /* height: a; */
+}
+
+.movie__list__item__desc{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: black;
+    font-weight: bold;
+    flex: 1;
+    margin-top: 5px;
+}
+
+
+.movie__list__item__year{
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+.nominate__button {
+    color: white;
+    align-self: flex-start;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: #7ba495;
+    border: none;
+    border-radius: 2px;
+}
+
+.nominate__button:active{
+  background-color: rgb(115, 239, 115);
+}
+
+.nominate__button:hover {
+    cursor: pointer;
+    background-color: #95b1a7;
+}
+.nominate__button:disabled {
+    background: gray;
+}
+
+.nominate__button:disabled:hover {
+    cursor: default;
+}
+
+
+.greenCheck:disabled {
+    background: #4bb543 !important;
+}
